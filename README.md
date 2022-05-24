@@ -12,7 +12,7 @@ This template, 'turbonomic-tz-target-config.yaml', configures AWS, Azure, vSpher
 ## Steps to deploy the use cases:
 
 1) Clone this repository: `git clone https://github.ibm.com/gsi-labs/turbonomic-tz-target-config.git'
-2) Change directory to the cloned direcrtory: `cd turbonomic-tz-target-config.git`
+2) Change directory to the cloned direcrtory: `cd turbonomic-tz-target-config`
 3) Run below command:
 
 `oc new-app -f turbonomic-tz-target-config.yaml -p TURBO_NAMESPACE=<Turbonomic-namespace> -p TURBO_ADMIN_USER=<Turbonomic-User> -p TURBO_PASSWORD=<Turbonomic-password>`
