@@ -1,5 +1,5 @@
 # Turbonomic post install steps for targets configuration
-This template 'turbonomic-tz-target-config.yaml' configures AWS, Azure, vSphere, Openshift and Instana targets, so that Turbonomic can provide appropriate action recommendations. Only Turbonomic deployed on AWS ROSA, Azure ARO and IBM ROKS clusters through TechZone are supported.
+This template, 'turbonomic-tz-target-config.yaml', configures AWS, Azure, vSphere, Openshift and Instana targets, so that Turbonomic can provide appropriate action recommendations. Only Turbonomic deployed on AWS ROSA, Azure ARO and IBM ROKS clusters through TechZone are supported.
 
 ## Pre-requisites:
  - ROSA/ARO/ROKS cluster deployed through TechZone
