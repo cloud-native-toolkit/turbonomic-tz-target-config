@@ -1,0 +1,126 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  turbo: turbo-usecases
+metadata:
+  name: turbo-usecases
+  annotations:
+    openshift.io/display-name: Turbonomic usecases deployment
+    description: This tool is used to deploy preconfigured usecases for Turbonomic
+    tags: turbonomic,arm,ibm
+objects:
+- kind: ServiceAccount
+  apiVersion: v1
+  metadata:
+    name: turbousecase-sa
+    namespace: ${TURBO_NAMESPACE}
+  secrets:
+    - name: turbousecase
+    
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRole
+  metadata:
+    name: turbousecaserole
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - namespaces
+    - pods
+    - secrets
+    - serviceaccounts
+    - persistentvolumeclaims
+    - services
+    verbs:
+    - get
+    - create
+  - apiGroups:
+    - apps
+    resources:
+    - deployments
+    - statefulsets
+    verbs:
+    - get
+    - create
+    - update
+    - patch
+  - apiGroups:
+    - project.openshift.io
+    resources:
+    - projects
+    verbs:
+    - get
+    - create
+  - apiGroups:
+    - rbac.authorization.k8s.io
+    resources:
+    - rolebindings
+    - clusterrolebindings
+    - roles
+    - clusterroles
+    verbs:
+    - get
+    - create
+  - apiGroups:
+    - route.openshift.io
+    resources:
+    - routes
+    verbs:
+    - get
+    - list
+  - apiGroups:
+    - security.openshift.io
+    resources:
+    - securitycontextconstraints
+    verbs:
+    - get
+    - use
+    
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: turbo-usecase-clusterrolebinding
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: turbousecaserole
+  subjects:
+  - kind: ServiceAccount
+    name: turbousecase-sa
+    namespace: ${TURBO_NAMESPACE}
+
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: turbousecase
+    namespace: ${TURBO_NAMESPACE}
+  spec:
+    template:
+      spec:
+        containers:
+        - env:
+          - name: TURBONAMESPACE
+            value: ${TURBO_NAMESPACE}
+          - name: TURBOADMINUSER
+            value: ${TURBO_ADMIN_USER}
+          - name: TURBOPASSWORD
+            value: ${TURBO_PASSWORD}
+          image: quay.io/ecotz/turbonomic-usecases:latest
+          imagePullPolicy: Always
+          name: turbousecase
+          securityContext:
+            allowPrivilegeEscalation: false
+        restartPolicy: Never
+        serviceAccountName: turbousecase-sa
+    backoffLimit: 0
+    ttlSecondsAfterFinished: 2
+parameters:
+- displayName: Namespace where Turbonomic is deployed
+  name: TURBO_NAMESPACE
+  required: true
+- displayName: Turbonomic admin user
+  name: TURBO_ADMIN_USER
+  required: true
+- displayName: Turbonomic admin password
+  name: TURBO_PASSWORD
+  required: true
