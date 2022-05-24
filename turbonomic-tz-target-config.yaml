@@ -25,6 +25,13 @@ objects:
   - apiGroups:
     - ""
     resources:
+    - nodes
+    verbs:
+    - get
+    - list
+  - apiGroups:
+    - ""
+    resources:
     - namespaces
     - pods
     - secrets
