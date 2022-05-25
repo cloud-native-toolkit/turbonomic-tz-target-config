@@ -4,6 +4,7 @@ This template, 'turbonomic-tz-target-config.yaml', configures AWS, Azure, vSpher
 ## Pre-requisites:
  - ROSA/ARO/ROKS cluster deployed through TechZone
  - Turbonomic is up and running
+ - aws, azure, vcenter, instana, kubeturbo and udt probes are enabled
  - Valid Turbonomic license is applied
  - oc client on your workstation
  - You should have cluster-admin access on the cluster
